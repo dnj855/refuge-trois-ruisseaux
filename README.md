@@ -21,13 +21,13 @@ C'est le site vitrine que le refuge fait tourner depuis 2016 : celui que l'appre
 | --- | --- | --- |
 | Liens orange abricot sur fond crème (1,88:1) | Tous les liens du contenu, par exemple « Voir tous nos animaux à l'adoption » sur l'accueil | 7 |
 | Bouton « Faire un don » en blanc sur abricot (2,02:1) | En-tête de chaque page, bloc d'appel de l'accueil | 7 |
-| Vidéo en lecture automatique et en boucle, sans son et sans bouton pour l'arrêter, 30,6 Mo | Haut de l'accueil | 10 |
-| Photos publiées telles que sorties du téléphone : 4032 × 3024 px, 5,1 Mo chacune, affichées à 940 px de large au plus | Carrousel de l'accueil, catalogue, fiches | 10 |
+| Vidéo en lecture automatique et en boucle, sans son et sans bouton pour l'arrêter, 2048 × 1080, 17,3 Mo | Haut de l'accueil | 10 |
+| Photos publiées telles quelles, en pleine résolution : de 4160 à 6720 px de large, de 1,5 à 9,4 Mo (4,2 Mo en moyenne), affichées à 940 px de large au plus | Carrousel de l'accueil, catalogue, fiches | 10 |
 | Carrousel de douze photos chargées d'un coup alors qu'une seule est visible | Accueil | 10 |
 | Fenêtre de dons dont le refus dit « Non merci, je préfère ne pas les aider » | Accueil, 3 secondes après l'arrivée | 11 |
 | Case « Je m'inscris à la lettre d'information du refuge » cochée d'avance | `contact.html` | 11 |
 
-Poids de l'accueil : environ 92 Mo (douze photos à 5,1 Mo et la vidéo). Mesuré dans Chromium le 05/10 : 20 requêtes, 61 Mo transférés avant la fin du chargement de la vidéo.
+Poids de l'accueil : environ 68 Mo (douze photos, 50,5 Mo en tout, et la vidéo, 17,3 Mo).
 
 Le site ne charge aucune ressource tierce : ni police distante, ni outil de mesure, ni module de dons. Ce que les outils d'audit trouvent vient donc des seuls défauts ci-dessus.
 
@@ -50,13 +50,13 @@ Ce qui n'est **pas** un défaut, à dessein : les champs ont leurs étiquettes, 
 
 ## Photos et vidéo
 
-Les photos et la vidéo actuelles sont **provisoires** : une empreinte de patte et le nom de l'animal sur fond coloré, avec un grain qui leur donne le poids d'une vraie photo de téléphone. Elles seront remplacées par la pièce n° 4 (photos et vidéo sous licence libre).
+Les douze photos viennent d'Unsplash et la vidéo de Pexels, téléchargées le 05/10/2026 dans leur fichier d'origine. Les deux licences autorisent l'usage libre, y compris commercial, sans crédit obligatoire. Les crédits figurent quand même dans les mentions légales, et la liste est dans `build.py` (`CREDITS_PHOTOS`, `CREDIT_VIDEO`).
 
-Pour les remplacer :
+Les originaux vivent dans `sources/`, hors du dépôt : `docs/photos/` et `docs/video/` en portent une copie. Ils ne sont ni compressés ni redimensionnés : leur poids est le défaut que la vidéo 10 corrige.
 
-1. Déposer chaque photo dans `sources/photos/<nom>.jpg` (`pistache.jpg`, `gaston.jpg`…) et la vidéo dans `sources/video/refuge.mp4`.
-2. **Ne pas les compresser ni les redimensionner** : le poids d'origine est le défaut que la vidéo 10 corrige. Viser 4 à 6 Mo par photo.
-3. Supprimer `docs/photos/` et `docs/video/`, puis relancer la construction.
+`docs/medias-optimises/` contient les versions allégées pour la maquette, que le site actuel n'utilise pas : chaque photo en WebP à 1200 et 600 px de large (de 7 à 215 Ko), et une affiche de la vidéo. Les douze photos en 600 px pèsent environ 0,25 Mo en tout, contre 50,5 Mo pour les originaux.
+
+Pour changer un média : déposer le nouveau fichier dans `sources/photos/<nom>.jpg` ou `sources/video/refuge.mp4`, supprimer sa copie dans `docs/` et ses versions dans `docs/medias-optimises/`, mettre à jour le crédit dans `build.py`, puis relancer la construction. Sans fichier dans `sources/`, le script fabrique un média provisoire.
 
 ## Construire
 
@@ -65,7 +65,7 @@ python3 build.py                   # mentions légales pour GitHub Pages
 python3 build.py --hebergeur vps   # mentions légales pour le VPS (hébergeur à compléter dans build.py)
 ```
 
-Le résultat est dans `docs/`, le dossier que publie GitHub Pages. Python 3 suffit pour les pages. Les médias provisoires demandent Pillow, NumPy et ffmpeg.
+Le résultat est dans `docs/`, le dossier que publie GitHub Pages. Il faut Python 3 avec Pillow, et ffmpeg pour l'affiche de la vidéo. Les médias provisoires demandent aussi NumPy.
 
 ## Mettre en ligne
 
@@ -76,7 +76,7 @@ Le résultat est dans `docs/`, le dossier que publie GitHub Pages. Python 3 suff
 3. Dans le dépôt : Settings → Pages → Build and deployment → Deploy from a branch → `main`, dossier `/docs`.
 4. Le site répond quelques minutes plus tard à `https://<compte>.github.io/refuge-trois-ruisseaux/`. Tous les liens sont relatifs : le sous-chemin ne gêne pas.
 
-Limites de GitHub Pages : 1 Go par site publié, 100 Go de bande passante par mois en limite souple. À 92 Mo l'accueil, cela laisse un millier de chargements complets par mois.
+Limites de GitHub Pages : 1 Go par site publié, 100 Go de bande passante par mois en limite souple. À 68 Mo l'accueil, cela laisse environ 1 500 chargements complets par mois.
 
 ### VPS
 

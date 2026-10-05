@@ -37,6 +37,24 @@ HEBERGEURS = {
 TELEPHONE = "02 61 91 47 30"  # plage réservée à la fiction par l'Arcep
 MISE_A_JOUR = "12 août 2026"
 
+# Crédits des médias réels (pièce 4, téléchargés le 05/10/2026 avec l'accord de Cédric).
+# Licences Unsplash et Pexels : usage libre, y compris commercial, crédit non obligatoire.
+CREDITS_PHOTOS = {
+    "pistache": ("Davex Video", "https://unsplash.com/photos/Yx2OVsyaPY0"),
+    "gaston": ("Linoleum Creative Collective", "https://unsplash.com/photos/ZQu-3viOINA"),
+    "nala": ("Kim Davies", "https://unsplash.com/photos/fEK4jvgnApg"),
+    "biscotte": ("David Clarke", "https://unsplash.com/photos/0h3Emf2YLKg"),
+    "rocky": ("Steve Smith", "https://unsplash.com/photos/KV1pVY72r-A"),
+    "mirabelle": ("Maurice DT", "https://unsplash.com/photos/r6-4faqRv44"),
+    "tigrou": ("Fernando Vega", "https://unsplash.com/photos/W6_PNq9EmN4"),
+    "caramel": ("Sanela Arsenić", "https://unsplash.com/photos/Ognooibzo9o"),
+    "lune": ("Ghana Shyam Khadka", "https://unsplash.com/photos/Bgv6wlr3WY4"),
+    "oscar": ("Robin Jonathan Deutsch", "https://unsplash.com/photos/zkwXS7I9U0w"),
+    "praline": ("Ingrid Halim", "https://unsplash.com/photos/WQK4dKLFpSg"),
+    "ficelle": ("Catarina Carvalho", "https://unsplash.com/photos/1K7Qf8OBXjU"),
+}
+CREDIT_VIDEO = ("cottonbro studio", "https://www.pexels.com/video/6568960/")
+
 # Les douze animaux du dossier de démonstration (§8.1).
 # Le site n'est plus à jour : il montre tout le monde « à adopter »,
 # y compris Ficelle (adoptée le 26/09), Nala et Caramel (réservés) et Tigrou (en soins).
@@ -192,7 +210,7 @@ def page(titre, actif, corps, racine="", fenetre=False):
         </div>
       </div>
       <p class="mention-fiction">© 2016 Refuge des Trois Ruisseaux · Site réalisé par un bénévole.<br>
-      Site fictif créé pour la formation Uncode School. Aucun animal, aucune personne, aucun don et aucun message de ce site n'est réel.</p>
+      Site fictif créé pour la formation Uncode School. Aucun animal n'est à l'adoption, aucune personne n'existe, aucun don ni aucun message n'est réel.</p>
     </div>
   </footer>
 {fenetre_html}
@@ -436,12 +454,33 @@ def mentions(hebergeur):
       <h2 id="titre-donnees">Données personnelles</h2>
       <p>Les informations envoyées par le formulaire de contact servent à vous répondre. Pour exercer vos droits, appelez-nous ou écrivez-nous par ce même formulaire.</p>
     </section>
+{credits_html()}
     <section aria-labelledby="titre-fiction">
       <h2 id="titre-fiction">Un site fictif</h2>
-      <p>Le Refuge des Trois Ruisseaux n'existe pas. Ce site a été créé pour la formation Uncode School, comme support de cours sur la conception d'interfaces. Il comporte volontairement des défauts. Les animaux, les personnes et le numéro de téléphone sont fictifs : le numéro appartient à une plage réservée à la fiction.</p>
+      <p>Le Refuge des Trois Ruisseaux n'existe pas. Ce site a été créé pour la formation Uncode School, comme support de cours sur la conception d'interfaces. Il comporte volontairement des défauts. Les noms et les histoires des animaux, les personnes et le numéro de téléphone sont fictifs : le numéro appartient à une plage réservée à la fiction. Aucun des animaux photographiés n'est à l'adoption.</p>
     </section>
   </main>"""
     return page("Mentions légales", "mentions-legales.html", corps)
+
+
+def credits_html():
+    lignes = []
+    for a in ANIMAUX:
+        if (SOURCES / "photos" / f"{a['slug']}.jpg").exists() and a["slug"] in CREDITS_PHOTOS:
+            auteur, url = CREDITS_PHOTOS[a["slug"]]
+            lignes.append(f'        <li>{e(a["nom"])} : <a href="{url}">{e(auteur)}</a>, Unsplash</li>')
+    if (SOURCES / "video" / "refuge.mp4").exists():
+        auteur, url = CREDIT_VIDEO
+        lignes.append(f'        <li>Vidéo de l\'accueil : <a href="{url}">{e(auteur)}</a>, Pexels</li>')
+    if not lignes:
+        return ""
+    return """    <section aria-labelledby="titre-credits">
+      <h2 id="titre-credits">Crédits photos et vidéo</h2>
+      <p>Photos sous licence Unsplash, vidéo sous licence Pexels.</p>
+      <ul>
+""" + "\n".join(lignes) + """
+      </ul>
+    </section>"""
 
 
 # ---------- Médias provisoires ----------
@@ -508,6 +547,33 @@ def video_provisoire(chemin):
     ], check=True)
 
 
+def optimiser():
+    """Versions allégées pour la maquette (vidéo 10) : publiées à part, jamais utilisées par le site actuel."""
+    from PIL import Image, ImageOps
+
+    sortie = DIST / "medias-optimises"
+    sortie.mkdir(exist_ok=True)
+    for a in ANIMAUX:
+        source = SOURCES / "photos" / f"{a['slug']}.jpg"
+        if not source.exists():
+            continue
+        for largeur in (1200, 600):
+            cible = sortie / f"{a['slug']}-{largeur}.webp"
+            if cible.exists():
+                continue
+            img = ImageOps.exif_transpose(Image.open(source)).convert("RGB")
+            img.thumbnail((largeur, largeur * 2))
+            img.save(cible, "WEBP", quality=75, method=6)
+    video = SOURCES / "video" / "refuge.mp4"
+    affiche = sortie / "refuge-affiche-1200.webp"
+    if video.exists() and not affiche.exists():
+        tmp = sortie / "_affiche.png"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "3", "-i", str(video),
+                        "-frames:v", "1", "-vf", "scale=1200:-2", str(tmp)], check=True)
+        Image.open(tmp).save(affiche, "WEBP", quality=75, method=6)
+        tmp.unlink()
+
+
 def main():
     hebergeur = "github"
     if "--hebergeur" in sys.argv:
@@ -556,6 +622,8 @@ def main():
         shutil.copy(source, cible)
     elif not cible.exists():
         video_provisoire(cible)
+
+    optimiser()
 
     poids = sum(f.stat().st_size for f in DIST.rglob("*") if f.is_file())
     print(f"docs/ construit : {len(pages)} pages, {poids / 1e6:.1f} Mo au total, hébergeur « {hebergeur} ».")
