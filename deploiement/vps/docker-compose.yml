@@ -1,0 +1,30 @@
+# Site actuel du Refuge des Trois Ruisseaux, servi derrière le Traefik du VPS.
+# Dossier conseillé : /opt/refuge/, avec à côté ce fichier, nginx.conf et site/ (le contenu de dist/).
+#
+# À vérifier contre le guide de déploiement du VPS avant le premier lancement :
+#   1. le nom du réseau Docker de Traefik : variable TRAEFIK_RESEAU dans un .env voisin (modèle : env.exemple) ;
+#   2. le nom du point d'entrée HTTPS de Traefik (ici « websecure ») ;
+#   3. le résolveur : myresolver (défi DNS Cloudflare) si la zone clangroth.fr est chez Cloudflare,
+#      sinon tlsresolver (défi TLS-ALPN) ;
+#   4. l'enregistrement DNS du sous-domaine vers le VPS, posé AVANT le lancement.
+services:
+  refuge:
+    image: nginx:1.27-alpine
+    container_name: refuge
+    restart: unless-stopped
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.refuge.rule=Host(`refuge.clangroth.fr`)
+      - traefik.http.routers.refuge.entrypoints=websecure
+      - traefik.http.routers.refuge.tls.certresolver=myresolver
+      - traefik.http.services.refuge.loadbalancer.server.port=80
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_RESEAU:?Renseigner TRAEFIK_RESEAU dans .env}

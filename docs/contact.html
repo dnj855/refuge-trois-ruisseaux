@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Contact · Refuge des Trois Ruisseaux</title>
+  <meta name="description" content="Refuge des Trois Ruisseaux, chiens et chats à l'adoption en Normandie. Site fictif créé pour la formation Uncode School.">
+  <link rel="icon" href="images/refuge-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="marque" href="index.html">
+        <img src="images/refuge-logo-fond-sombre.svg" alt="" width="64" height="64">
+        <span><strong>Refuge des Trois Ruisseaux</strong>
+        <span>Chiens et chats à l'adoption en Normandie</span></span>
+      </a>
+      <a class="bouton-don" href="don.html">Faire un don</a>
+    </div>
+  </header>
+  <nav class="menu" aria-label="Menu principal">
+    <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="animaux.html">Nos animaux</a></li>
+        <li><a href="adopter.html">Adopter</a></li>
+        <li><a href="aider.html">Nous aider</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+    </ul>
+  </nav>
+  <main class="conteneur">
+    <h1 class="titre-page">Nous contacter</h1>
+    <p class="chapeau">Une question sur un animal, une adoption, le bénévolat ? Écrivez-nous, nous vous répondons sous quelques jours. Vous pouvez aussi nous appeler au 02 61 91 47 30 aux heures de visite.</p>
+    <form class="contact" action="#" method="post">
+      <div class="champ">
+        <label for="nom">Nom et prénom</label>
+        <input id="nom" name="nom" type="text" autocomplete="name" required>
+      </div>
+      <div class="champ">
+        <label for="email">Adresse e-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="champ">
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" name="telephone" type="tel" autocomplete="tel">
+      </div>
+      <div class="champ">
+        <label for="sujet">Sujet</label>
+        <select id="sujet" name="sujet">
+          <option>Adoption</option>
+          <option>Bénévolat</option>
+          <option>Don</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label for="message">Votre message</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+      </div>
+      <div class="case">
+        <input id="lettre" name="lettre" type="checkbox" checked>
+        <label for="lettre">Je m'inscris à la lettre d'information du refuge</label>
+      </div>
+      <p class="petit">Vos informations servent à répondre à votre message. Voir les <a href="mentions-legales.html">mentions légales</a>.</p>
+      <button class="bouton" type="submit">Envoyer</button>
+      <p id="message-envoi" class="message-envoi" tabindex="-1" hidden>Site fictif : votre message n'a été envoyé à personne et rien n'a été enregistré.</p>
+    </form>
+  </main>
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="colonnes">
+        <div>
+          <img src="images/refuge-logo-fond-sombre.svg" alt="" width="56" height="56">
+          <p><strong>Refuge des Trois Ruisseaux</strong><br>Association loi 1901<br>Chemin des Trois Ruisseaux, Normandie</p>
+        </div>
+        <div>
+          <h2>Horaires de visite</h2>
+          <p>Du mercredi au dimanche, de 14h à 17h30.<br>Fermé les jours fériés.</p>
+        </div>
+        <div>
+          <h2>Nous joindre</h2>
+          <p>Téléphone : 02 61 91 47 30</p>
+          <p><a href="contact.html">Formulaire de contact</a> · <a href="mentions-legales.html">Mentions légales</a></p>
+        </div>
+      </div>
+      <p class="mention-fiction">© 2016 Refuge des Trois Ruisseaux · Site réalisé par un bénévole.<br>
+      Site fictif créé pour la formation Uncode School. Aucun animal, aucune personne, aucun don et aucun message de ce site n'est réel.</p>
+    </div>
+  </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>
