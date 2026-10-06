@@ -2,7 +2,7 @@
 
 Pièce de démonstration n° 3 du chapitre « Concevoir et construire les interfaces » (Uncode School, S4 Hopper). Version du 05/10/2026.
 
-C'est le site vitrine que le refuge fait tourner depuis 2016 : celui que l'apprenant découvre dans l'existant du dossier, et que les vidéos 7, 10 et 11 auscultent. Il porte volontairement cinq défauts, et seulement ceux-là.
+C'est le site vitrine que le refuge fait tourner depuis 2016 : celui que l'apprenant découvre dans l'existant du dossier, et que les vidéos 7, 10 et 11 auscultent. Il porte volontairement six défauts, et seulement ceux-là.
 
 ## Les pages
 
@@ -26,6 +26,7 @@ C'est le site vitrine que le refuge fait tourner depuis 2016 : celui que l'appre
 | Carrousel de douze photos chargées d'un coup alors qu'une seule est visible | Accueil | 10 |
 | Fenêtre de dons dont le refus dit « Non merci, je préfère ne pas les aider » | Accueil, 3 secondes après l'arrivée | 11 |
 | Case « Je m'inscris à la lettre d'information du refuge » cochée d'avance | `contact.html` | 11 |
+| Catalogue hors des règles des annonces en ligne (code rural, L214-8 VI et L214-8-1 ; arrêté du 28 juin 2023) : ni fenêtre ni bandeau de sensibilisation, aucune mention obligatoire sur les fiches (espèce et race, lieu de naissance, numéro d'identification, livre généalogique), pas de mention « annonce vérifiée » | Accueil (carrousel), `animaux.html`, fiches | 4, 11 |
 
 Poids de l'accueil : environ 68 Mo (douze photos, 50,5 Mo en tout, et la vidéo, 17,3 Mo).
 
